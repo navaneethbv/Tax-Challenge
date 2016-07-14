@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:Configuration_Files/Tax.properties</value>
+            </list>
+        </property>
+        <property name="ignoreResourceNotFound" value="true"/>
+    </bean>
+    <bean id="form1040Implementation" class="taxengine.controller.Form1040Implementation" autowire="byName">
+        <property name="taxCalc" ref="taxCalc"></property>
+    </bean>
+    <bean id="taxCalc" class = "taxengine.calculate.TaxCalculation" autowire="constructor">
+         <property name="fedTax" value="${taxengine-config.federal_income_tax}"></property>
+        <property name="earnedIncome" value="${taxengine-config.earned_income_credit}"></property>
+        <property name="nonCombatElection" value="${taxengine-config.non_combat_election}"></property>
+        <property name="stateTax" value="${taxengine-config.state_income_tax}"></property>
+        <property name="otherTax" value="${taxengine-config.other_taxes}"></property>
+    </bean>
+</beans>
